@@ -13,15 +13,33 @@
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"></bean>
 
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
+        <!--<property name="dataSource" ref="dataSource"></property>-->
+    <!--</bean>-->
+
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:web/mybatis/SqlMapConfig.xml"></property>
     </bean>
 
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="web.dao"></property>
+    </bean>
 
     <!--手动配置视图解析器，方便跳转界面-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"></property>
         <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--配置全局异常捕获器-->
+    <bean class="web.exception.MyHandlerExceptionResolver"/>
+
+    <!--配置图片上传解析器 maxUploadSize默认单位为B   5M  1024 * 1024 * 5-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="400000"></property>
     </bean>
 </beans>
 
